@@ -1,8 +1,8 @@
 package com.example.hospital_app_server.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "patient")
@@ -16,6 +16,9 @@ public class Patient extends Person {
 
     @Column(name = "address")
     private int address;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Visit> visits;
 
     public Patient() {
     }
@@ -49,6 +52,14 @@ public class Patient extends Person {
 
     public void setAddress(int address) {
         this.address = address;
+    }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     }
 
     @Override

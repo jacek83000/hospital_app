@@ -21,6 +21,20 @@ public class Visit {
     @Column(name = "price")
     private double price;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
     public Visit() {
     }
 
@@ -60,6 +74,30 @@ public class Visit {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     @Override

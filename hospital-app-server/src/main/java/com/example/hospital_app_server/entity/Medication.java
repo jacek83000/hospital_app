@@ -23,6 +23,11 @@ public class Medication {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
+
     public Medication() {
     }
 
@@ -71,6 +76,14 @@ public class Medication {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
     }
 
     @Override

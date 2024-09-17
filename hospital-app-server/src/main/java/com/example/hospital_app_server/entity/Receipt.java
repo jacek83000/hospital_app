@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "receipt")
@@ -21,6 +22,13 @@ public class Receipt {
 
     @Column(name = "total_price")
     private double totalPrice;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receipt", cascade = CascadeType.ALL)
+    private List<Medication> medications;
+
+    @OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL)
+    @JoinColumn(name = "visit_id")
+    private Visit visit;
 
     public Receipt() {
     }
@@ -61,6 +69,22 @@ public class Receipt {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(List<Medication> medications) {
+        this.medications = medications;
+    }
+
+    public Visit getVisit() {
+        return visit;
+    }
+
+    public void setVisit(Visit visit) {
+        this.visit = visit;
     }
 
     @Override
