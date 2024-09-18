@@ -3,11 +3,12 @@ package com.example.hospital_app_server.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.example.hospital_app_server.utils.date.DateUtils.getDateXDaysLaterFromNow;
 
 @Entity
 @Table(name = "receipt")
@@ -16,12 +17,13 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
-    @CreatedDate
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
 
     @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_date")
     private Date expirationDate;
 
@@ -43,6 +45,15 @@ public class Receipt {
         this.createdAt = createdAt;
         this.expirationDate = expirationDate;
         this.totalPrice = totalPrice;
+    }
+
+    public Receipt(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.expirationDate = getDateXDaysLaterFromNow(14);
     }
 
     public int getId() {
