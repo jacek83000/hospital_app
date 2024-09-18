@@ -1,6 +1,9 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.Date;
 
@@ -12,12 +15,15 @@ public class Visit {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @Column(name = "date")
     private Date date;
 
+    @NotNull
     @Column(name = "assurance")
     private boolean assurance;
 
+    @DecimalMin(value = "0.0")
     @Column(name = "price")
     private double price;
 

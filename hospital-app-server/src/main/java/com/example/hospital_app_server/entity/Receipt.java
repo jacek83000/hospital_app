@@ -1,6 +1,9 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
@@ -13,13 +16,16 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
+    @NotNull
     @Column(name = "expiration_date")
     private Date expirationDate;
 
+    @DecimalMin(value = "0.0")
     @Column(name = "total_price")
     private double totalPrice;
 

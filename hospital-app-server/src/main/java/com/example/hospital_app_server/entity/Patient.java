@@ -1,6 +1,7 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -8,14 +9,19 @@ import java.util.List;
 @Table(name = "patient")
 public class Patient extends Person {
 
+    @NotNull
+    @Max(value = 200)
     @Column(name = "age")
     private int age;
 
+    @NotBlank
+    @Pattern(regexp = "^(male|female)$", message = "only 2 values are accepted (male or female)")
     @Column(name = "sex")
     private String sex;
 
+    @NotBlank
     @Column(name = "address")
-    private int address;
+    private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Visit> visits;
@@ -23,7 +29,7 @@ public class Patient extends Person {
     public Patient() {
     }
 
-    public Patient(String firstName, String lastName, String contactNumber, String email, int age, String sex, int address) {
+    public Patient(String firstName, String lastName, String contactNumber, String email, int age, String sex, String address) {
         super(firstName, lastName, contactNumber, email);
         this.age = age;
         this.sex = sex;
@@ -46,11 +52,11 @@ public class Patient extends Person {
         this.sex = sex;
     }
 
-    public int getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(int address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

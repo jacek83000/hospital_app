@@ -1,6 +1,8 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 
 @Entity
@@ -12,15 +14,19 @@ public abstract class Person {
     @Column(name = "id")
     private int id;
 
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
+    @NotBlank
     @Column(name = "contact_number")
     private String contactNumber;
 
+    @Email
     @Column(name = "email")
     private String email;
 

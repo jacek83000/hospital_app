@@ -1,6 +1,8 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -8,9 +10,12 @@ import java.util.List;
 @Table(name = "doctor")
 public class Doctor extends Person {
 
+    @NotBlank
     @Column(name = "specialization")
     private String specialization;
 
+    @NotNull
+    @Max(value = 100)
     @Column(name = "years_of_experience")
     private int yearsOfExperience;
 

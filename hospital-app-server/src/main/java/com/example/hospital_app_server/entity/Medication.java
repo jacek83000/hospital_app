@@ -1,6 +1,8 @@
 package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 
 @Entity
@@ -11,15 +13,20 @@ public class Medication {
     @Column(name = "id")
     private int id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Column(name = "company_name")
     private String companyName;
 
+    @NotNull
+    @DecimalMin(value = "0.0")
     @Column(name = "price")
     private double price;
 
+    @NotNull
     @Column(name = "description")
     private String description;
 
