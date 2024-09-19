@@ -22,7 +22,6 @@ public class Receipt {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_date")
     private Date expirationDate;
@@ -39,12 +38,6 @@ public class Receipt {
     private Visit visit;
 
     public Receipt() {
-    }
-
-    public Receipt(Date createdAt, Date expirationDate, double totalPrice) {
-        this.createdAt = createdAt;
-        this.expirationDate = expirationDate;
-        this.totalPrice = totalPrice;
     }
 
     public Receipt(double totalPrice) {
