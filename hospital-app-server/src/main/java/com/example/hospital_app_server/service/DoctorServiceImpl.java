@@ -28,8 +28,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public void save(Doctor doctor) {
-        repository.save(doctor);
+    public Doctor save(Doctor doctor) {
+        return repository.save(doctor);
     }
 
     @Transactional

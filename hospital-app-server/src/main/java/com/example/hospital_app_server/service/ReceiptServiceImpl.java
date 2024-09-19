@@ -28,8 +28,8 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Transactional
     @Override
-    public void save(Receipt receipt) {
-        repository.save(receipt);
+    public Receipt save(Receipt receipt) {
+        return repository.save(receipt);
     }
 
     @Transactional

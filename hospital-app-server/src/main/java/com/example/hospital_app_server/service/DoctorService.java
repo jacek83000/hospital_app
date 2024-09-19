@@ -10,7 +10,7 @@ public interface DoctorService {
 
     List<Doctor> findAll();
 
-    void save(Doctor doctor);
+    Doctor save(Doctor doctor);
 
     void deleteById(int id);
 }

@@ -10,7 +10,7 @@ public interface ReceiptService {
 
     List<Receipt> findAll();
 
-    void save(Receipt receipt);
+    Receipt save(Receipt receipt);
 
     void deleteById(int id);
 }

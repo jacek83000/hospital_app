@@ -10,7 +10,7 @@ public interface VisitService {
 
     List<Visit> findAll();
 
-    void save(Visit visit);
+    Visit save(Visit visit);
 
     void deleteById(int id);
 }

@@ -28,8 +28,8 @@ public class VisitServiceImpl implements VisitService {
 
     @Transactional
     @Override
-    public void save(Visit visit) {
-        repository.save(visit);
+    public Visit save(Visit visit) {
+        return repository.save(visit);
     }
 
     @Transactional

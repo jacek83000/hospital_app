@@ -26,10 +26,9 @@ public class MedicationServiceImpl implements MedicationService {
         return repository.findAll();
     }
 
-    @Transactional
     @Override
-    public void save(Medication medication) {
-        repository.save(medication);
+    public Medication save(Medication medication) {
+        return repository.save(medication);
     }
 
     @Transactional
