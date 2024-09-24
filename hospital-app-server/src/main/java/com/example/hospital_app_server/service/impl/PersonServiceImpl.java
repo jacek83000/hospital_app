@@ -1,11 +1,13 @@
-package com.example.hospital_app_server.service;
+package com.example.hospital_app_server.service.impl;
 
 import com.example.hospital_app_server.entity.Person;
+import com.example.hospital_app_server.exception.ResourceNotFoundException;
 import com.example.hospital_app_server.repository.PersonRepository;
+import com.example.hospital_app_server.service.PersonService;
+import com.example.hospital_app_server.utils.MessageUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -16,8 +18,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> findById(int id) {
-        return repository.findById(id);
+    public Person findById(int id) {
+        String message = MessageUtil.getMessage("messages.resource.person.not-found", id);
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(message));
     }
 
     @Override
