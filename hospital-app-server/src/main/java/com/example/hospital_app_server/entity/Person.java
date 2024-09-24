@@ -14,19 +14,20 @@ public abstract class Person {
     @Column(name = "id")
     private int id;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "contact_number")
     private String contactNumber;
 
-    @Email
+    @NotBlank(message = "{messages.validation.required}")
+    @Email(message = "{messages.validation.email}")
     @Column(name = "email")
     private String email;
 

@@ -2,6 +2,7 @@ package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -9,12 +10,11 @@ import java.util.List;
 @Table(name = "doctor")
 public class Doctor extends Person {
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "specialization")
     private String specialization;
 
-    @NotNull
-    @Max(value = 100)
+    @Range(min = 0, max = 100, message = "{messages.validation.range}")
     @Column(name = "years_of_experience")
     private int yearsOfExperience;
 

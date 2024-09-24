@@ -1,14 +1,12 @@
 package com.example.hospital_app_server.entity;
 
+import com.example.hospital_app_server.validation.DecimalRange;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.example.hospital_app_server.utils.date.DateUtils.getDateXDaysLaterFromNow;
 
 @Entity
 @Table(name = "receipt")
@@ -18,22 +16,22 @@ public class Receipt {
     private int id;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_date")
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
-    @DecimalMin(value = "0.0")
+    //TODO:
+    @DecimalRange(min = 0.0, max = 150.0, message = "{messages.validation.range}")
     @Column(name = "total_price")
     private double totalPrice;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "receipt", cascade = CascadeType.ALL)
     private List<Medication> medications;
 
-    @OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "visit_id")
     private Visit visit;
 
@@ -46,7 +44,7 @@ public class Receipt {
 
     @PrePersist
     protected void onCreate() {
-        this.expirationDate = getDateXDaysLaterFromNow(14);
+        this.expirationDate = LocalDate.now().atStartOfDay().plusDays(14);
     }
 
     public int getId() {
@@ -57,19 +55,19 @@ public class Receipt {
         this.id = id;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 

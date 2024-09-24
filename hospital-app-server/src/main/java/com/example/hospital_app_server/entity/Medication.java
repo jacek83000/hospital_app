@@ -1,9 +1,8 @@
 package com.example.hospital_app_server.entity;
 
+import com.example.hospital_app_server.validation.DecimalRange;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 
 @Entity
@@ -14,20 +13,18 @@ public class Medication {
     @Column(name = "id")
     private int id;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "name")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "company_name")
     private String companyName;
 
-    @NotNull
-    @DecimalMin(value = "0.0")
+    @DecimalRange(min = 0.0, max = 100_000.0, message = "{messages.validation.range}")
     @Column(name = "price")
     private double price;
 
-    @NotNull
     @Column(name = "description")
     private String description;
 

@@ -2,6 +2,7 @@ package com.example.hospital_app_server.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -9,17 +10,16 @@ import java.util.List;
 @Table(name = "patient")
 public class Patient extends Person {
 
-    @NotNull
-    @Max(value = 200)
+    @Range(min = 0, max = 200, message = "{messages.validation.range}")
     @Column(name = "age")
     private int age;
 
-    @NotBlank
-    @Pattern(regexp = "^(male|female)$", message = "only 2 values are accepted (male or female)")
+    @NotBlank(message = "{messages.validation.required}")
+    @Pattern(regexp = "^(male|female)$", message = "{messages.validation.sex}")
     @Column(name = "sex")
     private String sex;
 
-    @NotBlank
+    @NotBlank(message = "{messages.validation.required}")
     @Column(name = "address")
     private String address;
 

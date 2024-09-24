@@ -1,10 +1,11 @@
 package com.example.hospital_app_server.entity;
 
+import com.example.hospital_app_server.validation.DecimalRange;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "visit")
@@ -14,21 +15,20 @@ public class Visit {
     @Column(name = "id")
     private int id;
 
-    @NotNull
+    @NotNull(message = "{messages.validation.notnull}")
     @Column(name = "date")
-    private Date date;
+    private LocalDateTime date;
 
-    @NotNull
+    @NotNull(message = "{messages.validation.notnull}")
     @Column(name = "assurance")
     private boolean assurance;
 
-    @DecimalMin(value = "0.0")
+    @DecimalRange(min = 0.0, max = 100_000.0, message = "{messages.validation.range}")
     @Column(name = "price")
     private double price;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "receipt_id")
-    private Receipt receipt;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "visit", cascade = CascadeType.ALL)
+    private List<Receipt> receipts;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
@@ -43,7 +43,7 @@ public class Visit {
     public Visit() {
     }
 
-    public Visit(Date date, boolean assurance, double price) {
+    public Visit(LocalDateTime date, boolean assurance, double price) {
         this.date = date;
         this.assurance = assurance;
         this.price = price;
@@ -57,11 +57,11 @@ public class Visit {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -81,12 +81,12 @@ public class Visit {
         this.price = price;
     }
 
-    public Receipt getReceipt() {
-        return receipt;
+    public List<Receipt> getReceipts() {
+        return receipts;
     }
 
-    public void setReceipt(Receipt receipt) {
-        this.receipt = receipt;
+    public void setReceipts(List<Receipt> receipts) {
+        this.receipts = receipts;
     }
 
     public Patient getPatient() {
