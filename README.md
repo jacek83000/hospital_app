@@ -40,6 +40,8 @@ A simple RESTful API for managing a hospital's doctors, patients, medications, r
 ![hospital_erd](https://github.com/user-attachments/assets/a38e9ad7-b561-401e-ac8e-a39c081f52d3)
 </br>
 
+</br>
+
 ## Getting Started
 
 ### Prerequisites
@@ -52,7 +54,7 @@ A simple RESTful API for managing a hospital's doctors, patients, medications, r
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/hospital-app.git
+   git clone https://github.com/jacek83000/hospital-app.git
    cd hospital-app
 
 2. Create a schema named *hospital_directory* in MySQL.
@@ -68,6 +70,7 @@ db.password=
 
 ## Tests
 ![tests](https://github.com/user-attachments/assets/cb243ac0-9fab-459c-88a5-296e0fe2aab1)
+</br>
 </br>
 
 ## Usage
