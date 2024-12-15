@@ -128,19 +128,19 @@ Set the `username` and `password` according to each role. Example:
 ![get_doctor](https://github.com/user-attachments/assets/d45e310b-8eb2-487d-952b-b15f364e98cd)
 
 
-![db2_s](https://github.com/user-attachments/assets/297ed625-c887-4d74-95f0-7f4611e90ad4)
 - `POST`:
 ![post_doctor](https://github.com/user-attachments/assets/5cab7696-7d03-45c9-b3d9-7e6eb8acb2e5)
+![db2_s](https://github.com/user-attachments/assets/297ed625-c887-4d74-95f0-7f4611e90ad4)
 
 
-![db3_s](https://github.com/user-attachments/assets/2e763243-9a7c-4228-8e8b-fe9d08d68823)
 - `PUT`:
 ![put_doctor](https://github.com/user-attachments/assets/cd254a88-0b8c-4b88-b322-3ec7a27132fb)
+![db3_s](https://github.com/user-attachments/assets/2e763243-9a7c-4228-8e8b-fe9d08d68823)
 
 
-![db4_s](https://github.com/user-attachments/assets/ec95319d-c978-482f-9c07-ff841b344a21)
 - `DELETE`:
 ![delete_doctor](https://github.com/user-attachments/assets/25c596b9-65e5-482b-b8cf-e409da7ba096)
+![db4_s](https://github.com/user-attachments/assets/ec95319d-c978-482f-9c07-ff841b344a21)
 
 
 - `GET` (with call to external api):
