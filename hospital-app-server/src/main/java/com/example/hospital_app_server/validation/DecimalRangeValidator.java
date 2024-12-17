@@ -17,7 +17,7 @@ public class DecimalRangeValidator implements ConstraintValidator<DecimalRange, 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext constraintValidatorContext) {
         if (value == null) {
-            return true;
+            return false;
         }
         return value >= min && value <= max;
     }

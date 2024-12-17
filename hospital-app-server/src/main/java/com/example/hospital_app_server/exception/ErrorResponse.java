@@ -10,6 +10,11 @@ public class ErrorResponse {
     public ErrorResponse() {
     }
 
+    public ErrorResponse(Map<String, String> messages) {
+        this.timestamp = LocalDateTime.now();
+        this.messages = messages;
+    }
+
     public ErrorResponse(LocalDateTime timestamp, Map<String, String> messages) {
         this.timestamp = timestamp;
         this.messages = messages;

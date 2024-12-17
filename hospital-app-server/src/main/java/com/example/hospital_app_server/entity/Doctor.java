@@ -1,7 +1,9 @@
 package com.example.hospital_app_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
@@ -9,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "doctor")
 public class Doctor extends Person {
-
     @NotBlank(message = "{messages.validation.required}")
     @Column(name = "specialization")
     private String specialization;
@@ -18,7 +19,9 @@ public class Doctor extends Person {
     @Column(name = "years_of_experience")
     private int yearsOfExperience;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor", cascade = CascadeType.ALL)
+    @Valid
     private List<Visit> visits;
 
     public Doctor() {
@@ -34,7 +37,7 @@ public class Doctor extends Person {
         return specialization;
     }
 
-    public void setSpecialization(String specialization) {
+    public void setSpecialization(@NotBlank(message = "{messages.validation.required}") String specialization) {
         this.specialization = specialization;
     }
 
@@ -50,7 +53,7 @@ public class Doctor extends Person {
         return visits;
     }
 
-    public void setVisits(List<Visit> visits) {
+    public void setVisits(@Valid List<Visit> visits) {
         this.visits = visits;
     }
 
@@ -58,7 +61,7 @@ public class Doctor extends Person {
     public String toString() {
         return "Doctor{" +
                 super.toString() +
-                "specialization='" + specialization + '\'' +
+                ", specialization='" + specialization + '\'' +
                 ", yearsOfExperience=" + yearsOfExperience +
                 "} ";
     }

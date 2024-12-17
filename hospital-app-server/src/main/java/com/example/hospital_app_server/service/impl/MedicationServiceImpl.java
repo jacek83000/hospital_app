@@ -1,10 +1,12 @@
 package com.example.hospital_app_server.service.impl;
 
 import com.example.hospital_app_server.entity.Medication;
+import com.example.hospital_app_server.entity.Receipt;
 import com.example.hospital_app_server.exception.ResourceNotFoundException;
 import com.example.hospital_app_server.repository.MedicationRepository;
 import com.example.hospital_app_server.service.MedicationService;
 import com.example.hospital_app_server.utils.MessageUtil;
+import com.example.hospital_app_server.validation.ValidatableValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.List;
 @Service
 public class MedicationServiceImpl implements MedicationService {
     private final MedicationRepository repository;
+    private final ValidatableValidator validator;
 
-    public MedicationServiceImpl(MedicationRepository repository) {
+    public MedicationServiceImpl(MedicationRepository repository, ValidatableValidator validator) {
         this.repository = repository;
+        this.validator = validator;
     }
 
     @Override
@@ -46,7 +50,14 @@ public class MedicationServiceImpl implements MedicationService {
     @Transactional
     @Override
     public void deleteById(int id) {
-        findById(id);
+        detachMedication(findById(id));
         repository.deleteById(id);
+    }
+
+    private void detachMedication(Medication medication) {
+        for (Receipt receipt : medication.getReceipts()) {
+            receipt.getMedications().remove(medication);
+            validator.validateProperty(receipt, "medications");
+        }
     }
 }

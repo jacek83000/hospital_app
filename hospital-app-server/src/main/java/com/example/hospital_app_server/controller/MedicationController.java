@@ -1,7 +1,10 @@
 package com.example.hospital_app_server.controller;
 
-import com.example.hospital_app_server.dto.StringResponseDTO;
+import com.example.hospital_app_server.dto.mapper.MedicationMapper;
+import com.example.hospital_app_server.dto.response.MedicationGetResDTO;
+import com.example.hospital_app_server.dto.response.StringResDTO;
 import com.example.hospital_app_server.entity.Medication;
+import com.example.hospital_app_server.service.CompanyService;
 import com.example.hospital_app_server.service.MedicationService;
 import com.example.hospital_app_server.utils.MessageUtil;
 import jakarta.validation.Valid;
@@ -15,19 +18,22 @@ import java.util.List;
 @RequestMapping("/medications")
 public class MedicationController {
     private final MedicationService service;
+    private final MedicationMapper mapper;
 
-    public MedicationController(MedicationService service) {
+    public MedicationController(MedicationService service, MedicationMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Medication>> readAllMedications() {
+    public ResponseEntity<List<Medication>> getAllMedications() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Medication> readMedication(@PathVariable int id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity<MedicationGetResDTO> getMedication(@PathVariable int id) {
+        Medication medication = service.findById(id);
+        return new ResponseEntity<>(mapper.toDTO(medication), HttpStatus.OK);
     }
 
     @PostMapping
@@ -41,9 +47,9 @@ public class MedicationController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<StringResponseDTO> deleteMedication(@PathVariable int id) {
+    public ResponseEntity<StringResDTO> deleteMedication(@PathVariable int id) {
         service.deleteById(id);
         String message = MessageUtil.getMessage("messages.resource.medication.deleted", id);
-        return new ResponseEntity<>(new StringResponseDTO(message), HttpStatus.OK);
+        return new ResponseEntity<>(new StringResDTO(message), HttpStatus.OK);
     }
 }

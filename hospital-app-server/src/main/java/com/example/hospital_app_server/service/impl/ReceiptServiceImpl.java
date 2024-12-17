@@ -1,10 +1,12 @@
 package com.example.hospital_app_server.service.impl;
 
+import com.example.hospital_app_server.entity.Medication;
 import com.example.hospital_app_server.entity.Receipt;
 import com.example.hospital_app_server.exception.ResourceNotFoundException;
 import com.example.hospital_app_server.repository.ReceiptRepository;
 import com.example.hospital_app_server.service.ReceiptService;
 import com.example.hospital_app_server.utils.MessageUtil;
+import com.example.hospital_app_server.validation.ValidatableValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.List;
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
     private final ReceiptRepository repository;
+    private final ValidatableValidator validator;
 
-    public ReceiptServiceImpl(ReceiptRepository repository) {
+    public ReceiptServiceImpl(ReceiptRepository repository, ValidatableValidator validator) {
         this.repository = repository;
+        this.validator = validator;
     }
 
     @Override
@@ -33,6 +37,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt create(Receipt receipt) {
         receipt.setId(0);
+        validator.validateProperty(receipt.getVisit(), "receipts");
         return repository.save(receipt);
     }
 
@@ -46,7 +51,14 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Transactional
     @Override
     public void deleteById(int id) {
-        findById(id);
+        detachReceipt(findById(id));
         repository.deleteById(id);
+    }
+
+    private void detachReceipt(Receipt receipt) {
+        receipt.getVisit().getReceipts().remove(receipt);
+        for (Medication medication : receipt.getMedications()) {
+            medication.getReceipts().remove(receipt);
+        }
     }
 }

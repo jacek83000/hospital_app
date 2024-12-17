@@ -1,6 +1,9 @@
 package com.example.hospital_app_server.controller;
 
-import com.example.hospital_app_server.dto.StringResponseDTO;
+import com.example.hospital_app_server.dto.mapper.VisitMapper;
+import com.example.hospital_app_server.dto.request.VisitCreateReqDTO;
+import com.example.hospital_app_server.dto.request.VisitUpdateReqDTO;
+import com.example.hospital_app_server.dto.response.StringResDTO;
 import com.example.hospital_app_server.entity.Visit;
 import com.example.hospital_app_server.service.VisitService;
 import com.example.hospital_app_server.utils.MessageUtil;
@@ -15,35 +18,39 @@ import java.util.List;
 @RequestMapping("/visits")
 public class VisitController {
     private final VisitService service;
+    private final VisitMapper mapper;
 
-    public VisitController(VisitService service) {
+    public VisitController(VisitService service, VisitMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Visit>> readAllVisits() {
+    public ResponseEntity<List<Visit>> getAllVisits() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK) ;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Visit> readVisit(@PathVariable int id) {
+    public ResponseEntity<Visit> getVisit(@PathVariable int id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Visit> createVisit(@Valid @RequestBody Visit visit) {
+    public ResponseEntity<Visit> createVisit(@Valid @RequestBody VisitCreateReqDTO dto) {
+        Visit visit = mapper.toEntity(dto);
         return new ResponseEntity<>(service.create(visit), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Visit> updateVisit(@Valid @RequestBody Visit visit) {
+    public ResponseEntity<Visit> updateVisit(@Valid @RequestBody VisitUpdateReqDTO dto) {
+        Visit visit = mapper.toEntity(dto);
         return new ResponseEntity<>(service.update(visit), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<StringResponseDTO> deleteVisit(@PathVariable int id) {
+    public ResponseEntity<StringResDTO> deleteVisit(@PathVariable int id) {
         service.deleteById(id);
         String message = MessageUtil.getMessage("messages.resource.visit.deleted", id);
-        return new ResponseEntity<>(new StringResponseDTO(message), HttpStatus.OK);
+        return new ResponseEntity<>(new StringResDTO(message), HttpStatus.OK);
     }
 }

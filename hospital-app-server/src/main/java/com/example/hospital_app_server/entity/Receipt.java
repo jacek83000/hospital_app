@@ -1,16 +1,20 @@
 package com.example.hospital_app_server.entity;
 
-import com.example.hospital_app_server.validation.DecimalRange;
+import com.example.hospital_app_server.validation.Validatable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "receipt")
-public class Receipt {
+public class Receipt implements Validatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,29 +26,36 @@ public class Receipt {
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
 
-    //TODO:
-    @DecimalRange(min = 0.0, max = 150.0, message = "{messages.validation.range}")
+    @Transient
     @Column(name = "total_price")
     private double totalPrice;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receipt", cascade = CascadeType.ALL)
-    private List<Medication> medications;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name = "receipt_medication",
+            joinColumns = @JoinColumn(name = "receipt_id"),
+            inverseJoinColumns = @JoinColumn(name = "medication_id")
+    )
+    @Size(min = 1, max = 12, message = "{messages.validation.size}")
+    private Set<Medication> medications = new HashSet<>();
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "visit_id")
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "visit_id", nullable = false)
+    @NotNull(message = "{messages.validation.notnull}")
     private Visit visit;
 
     public Receipt() {
     }
 
-    public Receipt(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     @PrePersist
     protected void onCreate() {
         this.expirationDate = LocalDate.now().atStartOfDay().plusDays(14);
+        this.totalPrice = calculateTotalPrice();
+    }
+
+    @PostLoad
+    private void onLoad() {
+        this.totalPrice = calculateTotalPrice();
     }
 
     public int getId() {
@@ -79,11 +90,11 @@ public class Receipt {
         this.totalPrice = totalPrice;
     }
 
-    public List<Medication> getMedications() {
+    public Set<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<Medication> medications) {
+    public void setMedications(Set<Medication> medications) {
         this.medications = medications;
     }
 
@@ -91,8 +102,12 @@ public class Receipt {
         return visit;
     }
 
-    public void setVisit(Visit visit) {
+    public void setVisit(@NotNull(message = "{messages.validation.notnull}") Visit visit) {
         this.visit = visit;
+    }
+
+    public double calculateTotalPrice() {
+        return medications.stream().map(Medication::getPrice).mapToDouble(Double::doubleValue).sum();
     }
 
     @Override

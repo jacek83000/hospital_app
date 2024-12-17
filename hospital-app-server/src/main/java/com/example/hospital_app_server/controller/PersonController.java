@@ -21,12 +21,12 @@ public class PersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Person>> readAllPeople() {
+    public ResponseEntity<List<Person>> getAllPeople() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> readPerson(@PathVariable int id) {
+    public ResponseEntity<Person> getPerson(@PathVariable int id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 }

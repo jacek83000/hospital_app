@@ -1,6 +1,6 @@
 package com.example.hospital_app_server.controller;
 
-import com.example.hospital_app_server.dto.StringResponseDTO;
+import com.example.hospital_app_server.dto.response.StringResDTO;
 import com.example.hospital_app_server.entity.Doctor;
 import com.example.hospital_app_server.service.DoctorService;
 import com.example.hospital_app_server.utils.MessageUtil;
@@ -21,12 +21,12 @@ public class DoctorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Doctor>> readAllDoctors() {
+    public ResponseEntity<List<Doctor>> getAllDoctors() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK) ;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Doctor> readDoctor(@PathVariable int id) {
+    public ResponseEntity<Doctor> getDoctor(@PathVariable int id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
@@ -41,9 +41,9 @@ public class DoctorController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<StringResponseDTO> deleteDoctor(@PathVariable int id) {
+    public ResponseEntity<StringResDTO> deleteDoctor(@PathVariable int id) {
         service.deleteById(id);
         String message = MessageUtil.getMessage("messages.resource.doctor.deleted", id);
-        return new ResponseEntity<>(new StringResponseDTO(message), HttpStatus.OK);
+        return new ResponseEntity<>(new StringResDTO(message), HttpStatus.OK);
     }
 }

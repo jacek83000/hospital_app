@@ -1,15 +1,18 @@
 package com.example.hospital_app_server.entity;
 
 import com.example.hospital_app_server.validation.DecimalRange;
+import com.example.hospital_app_server.validation.Validatable;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "visit")
-public class Visit {
+public class Visit implements Validatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -19,25 +22,26 @@ public class Visit {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @NotNull(message = "{messages.validation.notnull}")
     @Column(name = "assurance")
     private boolean assurance;
 
-    @DecimalRange(min = 0.0, max = 100_000.0, message = "{messages.validation.range}")
+    @DecimalRange(max = 100_000.0, message = "{messages.validation.range}")
     @Column(name = "price")
     private double price;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "visit", cascade = CascadeType.ALL)
+    @Size(max = 12, message = "{messages.validation.size}")
+    @Valid
     private List<Receipt> receipts;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "patient_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "patient_id", nullable = false)
+    @NotNull(message = "{messages.validation.notnull}")
     private Patient patient;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "doctor_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "doctor_id", nullable = false)
+    @NotNull(message = "{messages.validation.notnull}")
     private Doctor doctor;
 
     public Visit() {

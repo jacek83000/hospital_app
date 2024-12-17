@@ -46,7 +46,12 @@ public class VisitServiceImpl implements VisitService {
     @Transactional
     @Override
     public void deleteById(int id) {
-        findById(id);
+        detachVisit(findById(id));
         repository.deleteById(id);
+    }
+
+    private void detachVisit(Visit visit) {
+        visit.getDoctor().getVisits().remove(visit);
+        visit.getPatient().getVisits().remove(visit);
     }
 }

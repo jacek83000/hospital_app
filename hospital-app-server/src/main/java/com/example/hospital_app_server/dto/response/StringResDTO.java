@@ -1,9 +1,9 @@
-package com.example.hospital_app_server.dto;
+package com.example.hospital_app_server.dto.response;
 
-public class StringResponseDTO {
+public class StringResDTO {
     private String message;
 
-    public StringResponseDTO(String message) {
+    public StringResDTO(String message) {
         this.message = message;
     }
 
